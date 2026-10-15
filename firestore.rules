@@ -1,0 +1,39 @@
+rules_version = '2';
+// Imagine CRM · só e-mails liberados (e confirmados) leem ou gravam qualquer dado.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() { return request.auth != null && request.auth.token.email != null && request.auth.token.email_verified == true; }
+    function em() { return request.auth.token.email.lower(); }
+    function isOwner() { return signed() && em() == 'caduliam325@gmail.com'; }
+    function isMember() { return signed() && exists(/databases/$(database)/documents/members/$(em())); }
+    function isAdmin() { return isMember() && get(/databases/$(database)/documents/members/$(em())).data.role == 'admin'; }
+    function smallDoc() { return request.resource.data.keys().hasOnly(['j', 'c', 'u', 't']) && request.resource.data.j is string && request.resource.data.j.size() < 1000000; }
+
+    match /members/{email} {
+      allow read: if isMember() || (signed() && email == em());
+      // primeira instalação: o dono cria o próprio acesso junto com meta/setup
+      allow create: if isAdmin() || (isOwner() && email == em() && request.resource.data.role == 'admin'
+                      && !exists(/databases/$(database)/documents/meta/setup)
+                      && existsAfter(/databases/$(database)/documents/meta/setup));
+      allow update: if isAdmin() || (isMember() && email == em()
+                      && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ativo', 'uid', 'nome', 'ini']));
+      allow delete: if isAdmin() && email != em();
+    }
+
+    match /meta/setup {
+      allow read: if signed();
+      allow create: if isOwner() && getAfter(/databases/$(database)/documents/members/$(em())).data.role == 'admin';
+    }
+    match /meta/state { allow read, write: if isMember(); }
+    match /meta/robo { allow read: if isMember(); }
+
+    // escritos apenas pelos robôs (Cloud Functions)
+    match /market/{id} { allow read: if isMember(); }
+    match /news/{id} { allow read: if isMember(); }
+
+    match /{coll}/{id} {
+      allow read, delete: if isMember() && coll in ['leads','clientes','receber','pagar','projetos','design','vitrine','eventos','tarefas','pontos','docs','imgLib','alertas','relatorios','agendaEco','mood','assets'];
+      allow create, update: if isMember() && smallDoc() && coll in ['leads','clientes','receber','pagar','projetos','design','vitrine','eventos','tarefas','pontos','docs','imgLib','alertas','relatorios','agendaEco','mood','assets'];
+    }
+  }
+}

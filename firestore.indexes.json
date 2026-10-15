@@ -1,0 +1,16 @@
+{
+  "indexes": [],
+  "fieldOverrides": [
+    { "collectionGroup": "leads", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "clientes", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "receber", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "pagar", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "projetos", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "design", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "docs", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "vitrine", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "mood", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "eventos", "fieldPath": "j", "indexes": [] },
+    { "collectionGroup": "relatorios", "fieldPath": "j", "indexes": [] }
+  ]
+}

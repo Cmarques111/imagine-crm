@@ -1,0 +1,16 @@
+rules_version = '2';
+// Imagens do estúdio de design: só sócios liberados, até 15 MB, apenas imagens.
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isMember() {
+      return request.auth != null && request.auth.token.email_verified == true
+        && firestore.exists(/databases/(default)/documents/members/$(request.auth.token.email.lower()));
+    }
+    match /assets/{file} {
+      allow read: if isMember();
+      allow create, update: if isMember() && request.resource.size < 15 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+      allow delete: if isMember();
+    }
+    match /{all=**} { allow read, write: if false; }
+  }
+}

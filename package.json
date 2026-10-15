@@ -1,0 +1,19 @@
+{
+  "name": "imagine-crm",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "CRM interno da Imagine Concept: comercial, carteira, financeiro, mercado 24h, estúdio de design, relatórios e agenda.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:demo": "VITE_DEMO=1 vite build --outDir dist-demo",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^10.14.1"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}

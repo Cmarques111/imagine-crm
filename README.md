@@ -2,7 +2,7 @@
 
 CRM interno da **Imagine Concept**, de uso exclusivo dos sócios. Reúne comercial (funil Leads → R1 → Mapeamento → Ativação → Convertido), carteira, financeiro, Mercado 24h, calculadoras com HP12C, estúdio de design, relatórios com pontuação entre sócios e agenda com Google Agenda.
 
-- **Site:** Firebase Hosting (`https://SEU-PROJETO.web.app`)
+- **Site:** Firebase Hosting (`https://imagine-crm-4260d.web.app`)
 - **Login:** Firebase Authentication (e-mail e senha, com confirmação por e-mail)
 - **Dados:** Cloud Firestore em São Paulo (`southamerica-east1`), sincronizado em tempo real entre os sócios
 - **Imagens do estúdio:** Cloud Storage
@@ -33,7 +33,7 @@ As funções agendadas do Mercado 24h exigem o plano Blaze (pago conforme o uso)
 ### 3. Ativar o login
 
 1. Acesse **Authentication** › **Começar** › **Método de login** › **E-mail/senha** › Ativar › Salvar.
-2. Em **Authentication** › **Configurações** › **Domínios autorizados**, confirme que aparecem `SEU-PROJETO.web.app` e `SEU-PROJETO.firebaseapp.com`.
+2. Em **Authentication** › **Configurações** › **Domínios autorizados**, confirme que aparecem `imagine-crm-4260d.web.app` e `imagine-crm-4260d.firebaseapp.com`.
 3. Opcional: em **Authentication** › **Modelos**, traduza o e-mail de verificação e o de redefinição de senha para português (ícone de idioma no topo).
 
 ### 4. Criar o banco de dados e o armazenamento
@@ -47,16 +47,16 @@ As funções agendadas do Mercado 24h exigem o plano Blaze (pago conforme o uso)
 Necessário para exportar em PNG, PDF ou PPTX designs que tenham fotos enviadas.
 
 1. No console do Google Cloud, abra o **Cloud Shell** (ícone `>_` no topo): <https://console.cloud.google.com/?cloudshell=true>.
-2. Rode os comandos abaixo, trocando `SEU-PROJETO` pelo seu ID:
+2. Rode os comandos abaixo, trocando `imagine-crm-4260d` pelo seu ID:
 
 ```bash
 cat > cors.json <<'EOF'
-[{ "origin": ["https://SEU-PROJETO.web.app", "https://SEU-PROJETO.firebaseapp.com"], "method": ["GET"], "maxAgeSeconds": 3600 }]
+[{ "origin": ["https://imagine-crm-4260d.web.app", "https://imagine-crm-4260d.firebaseapp.com"], "method": ["GET"], "maxAgeSeconds": 3600 }]
 EOF
-gsutil cors set cors.json gs://SEU-PROJETO.firebasestorage.app
+gsutil cors set cors.json gs://imagine-crm-4260d.firebasestorage.app
 ```
 
-Se aparecer erro de bucket inexistente, use `gs://SEU-PROJETO.appspot.com`. O nome correto aparece no topo da página Storage.
+Se aparecer erro de bucket inexistente, use `gs://imagine-crm-4260d.appspot.com`. O nome correto aparece no topo da página Storage.
 
 ### 6. Ligar o GitHub ao Firebase (publicação automática)
 
@@ -73,7 +73,7 @@ A primeira publicação leva de 5 a 10 minutos. Se pedir para ativar alguma API 
 
 ### 7. Primeiro acesso (Carlos)
 
-1. Abra `https://SEU-PROJETO.web.app`.
+1. Abra `https://imagine-crm-4260d.web.app`.
 2. Clique em **Primeiro acesso**, informe nome, o e-mail `caduliam325@gmail.com` e uma senha com 8 caracteres ou mais.
 3. Confirme pelo link que chega no e-mail (verifique o spam) e entre com e-mail e senha.
 4. Nesse primeiro login, o sistema torna Carlos administrador e libera automaticamente:
@@ -93,7 +93,7 @@ Para liberar ou remover alguém depois, use **Configurações** › **Sócios** 
    - Em **Usuários de teste**, adicione os três e-mails dos sócios.
    - Mantenha em modo de teste. Assim não é preciso passar pela verificação do Google.
 3. Em **Credenciais** › **Criar credenciais** › **ID do cliente OAuth** › **Aplicativo da Web**.
-   - Origens JavaScript autorizadas: `https://SEU-PROJETO.web.app` e `https://SEU-PROJETO.firebaseapp.com`.
+   - Origens JavaScript autorizadas: `https://imagine-crm-4260d.web.app` e `https://imagine-crm-4260d.firebaseapp.com`.
    - Copie o **ID do cliente** (termina em `.apps.googleusercontent.com`).
 4. No CRM, como administrador: **Configurações** › **Google Agenda**, cole o ID.
 5. Cada sócio vai em **Agenda** › **Conectar Google Agenda** e autoriza a própria conta.

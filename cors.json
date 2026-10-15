@@ -1,1 +1,1 @@
-[{ "origin": ["https://imagine-crm.web.app", "https://imagine-crm.firebaseapp.com", "http://localhost:5173"], "method": ["GET"], "maxAgeSeconds": 3600 }]
+[{ "origin": ["https://imagine-crm-4260d.web.app", "https://imagine-crm-4260d.firebaseapp.com", "http://localhost:5173"], "method": ["GET"], "maxAgeSeconds": 3600 }]

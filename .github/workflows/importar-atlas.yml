@@ -1,0 +1,25 @@
+name: Importar identidade Atlas
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Baixar logo, ícones e fonte do Atlas
+        run: |
+          set -e
+          B=https://www.imagineconcept.com.br/adm/assets/img
+          mkdir -p public/atlas/icons
+          for f in atlas-icon-navy atlas-navy atlas-word-navy atlas-favicon simbolo-2; do curl -fsSL "$B/$f.png" -o "public/atlas/$f.png"; done
+          for n in hoje painel projetos contas leads posvenda aliancas processos agenda financeiro metas ranking equipe; do curl -fsSL "$B/icons/nav-$n.png" -o "public/atlas/icons/nav-$n.png"; done
+          curl -fsSL https://www.imagineconcept.com.br/assets/fonts/Sora-Bold.ttf -o public/atlas/Sora-Bold.ttf || true
+          ls -la public/atlas public/atlas/icons
+      - name: Salvar no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898900+github-actions[bot]@users.noreply.github.com"
+          git add public/atlas
+          git commit -m "Importa logo, ícones e fonte do Atlas" || echo "nada novo"
+          git push

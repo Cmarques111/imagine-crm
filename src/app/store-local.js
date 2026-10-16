@@ -1,4 +1,4 @@
-/* Imagine CRM · armazenamento local (modo demonstração e uso sem servidor) */
+/* Atlas · CRM da Imagine · armazenamento local (modo demonstração e uso sem servidor) */
 (function(){
 const W = window;
 const KEY = 'imagine.crm.v3', OLD = 'imagine.crm.v2', SKEY = 'imagine.session';

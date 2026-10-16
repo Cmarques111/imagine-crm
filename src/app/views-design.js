@@ -1,4 +1,4 @@
-/* Imagine CRM · Relatórios e Agenda */
+/* Atlas · CRM da Imagine · Relatórios e Agenda */
 (function(){
 const W = window;
 W.VIEWS = W.VIEWS || {}; W.AFTER = W.AFTER || {}; W.ACT = W.ACT || {}; W.CHANGE = W.CHANGE || {};

@@ -1,4 +1,4 @@
-/* Imagine CRM · Financeiro, Mercado 24h e calculadoras */
+/* Atlas · CRM da Imagine · Financeiro, Mercado 24h e calculadoras */
 (function(){
 const W = window;
 W.VIEWS = W.VIEWS || {}; W.AFTER = W.AFTER || {}; W.ACT = W.ACT || {}; W.CHANGE = W.CHANGE || {};

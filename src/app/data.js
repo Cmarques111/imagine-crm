@@ -1,4 +1,4 @@
-/* Imagine CRM · estrutura e dados de exemplo do protótipo */
+/* Atlas · CRM da Imagine · estrutura e dados de exemplo do protótipo */
 (function(){
 const W = window;
 

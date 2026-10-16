@@ -1,4 +1,4 @@
-/* Imagine CRM · shell, navegação e componentes comuns */
+/* Atlas · CRM da Imagine · shell, navegação e componentes comuns */
 (function(){
 const W = window;
 W.ST = null;
@@ -30,8 +30,8 @@ W.persist = () => { if (W.Store && W.ST) W.Store.save(W.ST); };
 W.setSync = (txt, kind) => { const si = $('#syncInfo'); if (si) si.innerHTML = '<span class="live-dot"' + (kind === 'warn' ? ' style="background:var(--warn);box-shadow:none"' : kind === 'off' ? ' style="background:var(--muted);box-shadow:none"' : '') + '></span>' + esc(txt); };
 
 const TABS = [
-  ['inicio', 'Início', 'home'], ['comercial', 'Comercial', 'funnel'], ['carteira', 'Carteira', 'wallet'], ['financeiro', 'Financeiro', 'money'],
-  ['mercado', 'Mercado 24h', 'globe'], ['design', 'Design', 'palette'], ['relatorios', 'Relatórios', 'report'], ['agenda', 'Agenda', 'calendar']
+  ['inicio', 'Início', 'hoje'], ['comercial', 'Comercial', 'leads'], ['carteira', 'Carteira', 'contas'], ['financeiro', 'Financeiro', 'financeiro'],
+  ['mercado', 'Mercado 24h', 'painel'], ['design', 'Design', 'projetos'], ['relatorios', 'Relatórios', 'ranking'], ['agenda', 'Agenda', 'agenda']
 ];
 
 /* ---------- Componentes ---------- */
@@ -39,7 +39,8 @@ W.av = (id) => '<span class="av" title="' + esc(socio(id).nome) + '">' + esc(soc
 W.servTag = (s) => s ? '<span class="tag ' + (s === 'Design' ? 't-design' : s === 'Financeiro' ? 't-fin' : 't-both') + '">' + esc(s) + '</span>' : '';
 W.stagePill = (s) => '<span class="pill ' + ({ Convertido: 'p-pos', Perdido: 'p-neg', 'Ativação': 'p-sky', Mapeamento: 'p-sky' }[s] || '') + '">' + esc(s) + '</span>';
 W.statusPill = (s) => '<span class="pill ' + ({ Pago: 'p-pos', Vencido: 'p-neg', 'Em aberto': 'p-warn', Saudável: 'p-pos', Atenção: 'p-warn', Risco: 'p-neg' }[s] || '') + '">' + esc(s) + '</span>';
-W.ph = (ic, eyebrow, title, meta, actions) => '<div class="ph"><div class="ph-l"><div class="ph-ico">' + icon(ic) + '</div><div><div class="eyebrow">' + esc(eyebrow) + '</div><h1>' + esc(title) + '</h1>' + (meta ? '<div class="ph-meta">' + meta + '</div>' : '') + '</div></div><div class="ph-r">' + (actions || '') + '</div></div>';
+const PH_AT = { home: 'hoje', funnel: 'leads', wallet: 'contas', money: 'financeiro', globe: 'painel', palette: 'projetos', report: 'ranking', calendar: 'agenda', settings: 'equipe', users: 'equipe' };
+W.ph = (ic, eyebrow, title, meta, actions) => '<div class="ph"><div class="ph-l"><div class="ph-ico">' + (PH_AT[ic] ? atIcon(PH_AT[ic]) : icon(ic)) + '</div><div><div class="eyebrow">' + esc(eyebrow) + '</div><h1>' + esc(title) + '</h1>' + (meta ? '<div class="ph-meta">' + meta + '</div>' : '') + '</div></div><div class="ph-r">' + (actions || '') + '</div></div>';
 W.kpi = (label, value, sub, extra, right) => '<div class="card kpi"><div class="kpi-l"><span>' + label + '</span>' + (right || '') + '</div><div class="kpi-v">' + value + '</div>' + (extra || '') + (sub ? '<div class="kpi-s">' + sub + '</div>' : '') + '</div>';
 W.cardW = (title, sub, body, opts) => {
   opts = opts || {};
@@ -144,7 +145,7 @@ W.renderDrawer = () => {
 
 /* ---------- Navegação ---------- */
 function renderTabs(){
-  $('#tabs').innerHTML = TABS.map(([id, l, ic]) => '<button class="tab ' + (W.UI.tab === id ? 'on' : '') + '" data-act="go" data-v="' + id + '"' + (W.UI.tab === id ? ' aria-current="page"' : '') + '>' + icon(ic, 'ic-sm') + l + (id === 'comercial' ? '<span class="badge">' + W.ST.leads.filter(l => !['Convertido', 'Perdido'].includes(l.stage)).length + '</span>' : '') + '</button>').join('');
+  $('#tabs').innerHTML = TABS.map(([id, l, ic]) => '<button class="tab ' + (W.UI.tab === id ? 'on' : '') + '" data-act="go" data-v="' + id + '"' + (W.UI.tab === id ? ' aria-current="page"' : '') + '>' + atIcon(ic) + l + (id === 'comercial' ? '<span class="badge">' + W.ST.leads.filter(l => !['Convertido', 'Perdido'].includes(l.stage)).length + '</span>' : '') + '</button>').join('');
 }
 W.render = () => {
   const fn = W.VIEWS[W.UI.tab] || W.VIEWS.inicio;
@@ -256,7 +257,7 @@ let started = false;
 function startApp(){
   if (started) return; started = true;
   $('#login').hidden = true; $('#app').hidden = false;
-  $('#brand').innerHTML = markSVG(34, '#F2F4F8', '#8FB0FF', 'Imagine Concept') + '<span class="brand-word"><b>IMAGINE</b><i>CONCEPT</i></span>';
+  $('#brand').innerHTML = atlasMark('', 'Atlas') + '<span class="brand-word">' + atlasWord() + '<i>Imagine Concept</i></span>';
   $('#meAv').textContent = socio(W.ME).ini || 'IC';
   const t = location.hash.slice(1);
   go(W.VIEWS[t] ? t : 'inicio');
@@ -297,9 +298,8 @@ async function enter() {
 }
 W.App = {
   init() {
-    $('#loginBrand').innerHTML = '<div style="display:flex;align-items:center;gap:16px">' + markSVG(72, '#FFFFFF', '#8FB0FF', 'Imagine Concept') +
-      '<div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:var(--f-display);font-stretch:112%;font-weight:700;font-size:30px;letter-spacing:.05em;line-height:1">IMAGINE</span><span style="font-family:var(--f-display);font-stretch:112%;font-weight:500;font-size:10px;letter-spacing:.6em;color:var(--sky)">CONCEPT</span></div></div>' +
-      '<div class="lb-tag">Ideias, números e design no mesmo lugar.</div><div class="lb-foot">CRM interno · uso exclusivo dos sócios</div>';
+    $('#loginBrand').innerHTML = '<div class="lb-logo">' + atlasMark('lb-mark', 'Atlas') + atlasWord('lb-word') + '</div>' +
+      '<div class="lb-tag">Clientes, números e design no mesmo lugar.</div><div class="lb-foot">CRM da Imagine Concept · uso exclusivo dos sócios</div>';
     const demo = W.Store.mode === 'local';
     $('#lgHint').textContent = demo ? 'Modo demonstração: qualquer e-mail e senha entram. Os dados ficam só neste navegador.' : 'Acesso restrito aos sócios convidados. Conexão protegida.';
     if (demo) { $('#lgUser').value = 'socio@imagineconcept.com.br'; $('#lgPass').value = 'demonstracao'; }

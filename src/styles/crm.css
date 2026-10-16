@@ -1,4 +1,4 @@
-/* Imagine Concept CRM: preto como base, grafite nas superfícies, azul marinho como cor secundária.
+/* Atlas · CRM da Imagine Concept: preto como base, grafite nas superfícies, azul marinho como cor secundária.
    Layout: barra superior + abas no estilo Salesforce, conteúdo rolável, barra utilitária no rodapé. */
 :root{
   color-scheme: dark;
@@ -8,8 +8,8 @@
   --navy:#0E2152; --navy-2:#15306F; --navy-3:#1B3C88; --blue:#2F5BCB; --blue-2:#3E6FE0; --sky:#8FB0FF;
   --pos:#37B486; --neg:#E2615F; --warn:#D9A441;
   --pos-bg:rgba(55,180,134,.12); --neg-bg:rgba(226,97,95,.12); --warn-bg:rgba(217,164,65,.13); --sky-bg:rgba(143,176,255,.12);
-  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
-  --f-body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --f-display:"Sora","Inter","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Inter","Helvetica Neue",Arial,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
   --r:8px; --r-sm:6px;
   --gut-l:max(16px, env(safe-area-inset-left, 0px));
@@ -479,3 +479,19 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
 .rk.first .pos-n{color:var(--warn)}
 .rk b{font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- Identidade Atlas ---------- */
+.atl{display:inline-block;flex-shrink:0;background:currentColor;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain}
+.atl-mark{width:30px;height:30px;color:#fff;transform:rotate(-8deg)}
+.atl-word{width:64px;height:18px;color:#fff;-webkit-mask-position:left center;mask-position:left center}
+.brand{gap:11px}
+.brand-word{gap:4px}
+.brand-word i{font-family:var(--f-body);font-weight:600;font-size:8px;letter-spacing:.32em;text-transform:uppercase;color:var(--sky)}
+.ati{width:18px;height:18px;color:var(--muted);transition:color .15s}
+.tab:hover .ati{color:var(--fg-2)}
+.tab.on .ati{color:var(--sky)}
+.ph-ico .ati{width:24px;height:24px;color:var(--sky)}
+.lb-logo{display:flex;align-items:center;gap:16px}
+.lb-mark{width:64px;height:64px}
+.lb-word{width:150px;height:44px}
+h1,h2,h3,.ph h1,.kpi-v,.lb-tag{letter-spacing:-.01em}

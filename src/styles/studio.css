@@ -415,3 +415,5 @@ input[type=range]{accent-color:#3E6FE0;width:100%}
 .sxp-notes{white-space:pre-wrap;font-size:17px;line-height:1.55;color:#E6EAF2}
 .sx-present.presenter .sxp-bar{opacity:1;left:calc((100% - 360px) / 2);bottom:16px}
 @media (max-width:820px){.sx-present.presenter{grid-template-columns:minmax(0,1fr)}.sxp-side{display:none}.sx-present.presenter .sxp-bar{left:50%}}
+
+.st-brand .atl-mark{width:32px;height:32px}

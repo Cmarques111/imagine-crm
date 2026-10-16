@@ -1,4 +1,4 @@
-# Imagine CRM
+# Atlas · CRM da Imagine Concept
 
 CRM interno da **Imagine Concept**, de uso exclusivo dos sócios. Reúne comercial (funil Leads → R1 → Mapeamento → Ativação → Convertido), carteira, financeiro, Mercado 24h, calculadoras com HP12C, estúdio de design, relatórios com pontuação entre sócios e agenda com Google Agenda.
 

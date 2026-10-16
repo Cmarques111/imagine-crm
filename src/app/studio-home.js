@@ -31,7 +31,7 @@ function render() {
   R.dataset.doc = '';
   const keep = R.querySelector('.st-main') ? R.querySelector('.st-main').scrollTop : 0;
   R.innerHTML = '<div class="st-shell"><aside class="st-side">' +
-    '<div class="st-brand">' + markSVG(34, '#F2F4F8', '#8FB0FF', 'Imagine Concept') + '<span><b>Estúdio</b><small>Imagine Concept</small></span></div>' +
+    '<div class="st-brand">' + atlasMark('', 'Atlas') + '<span><b>Estúdio</b><small>Atlas · Imagine</small></span></div>' +
     '<button class="st-create" data-act="stCreate">' + icon('plus', 'ic-sm') + 'Criar design</button>' +
     '<nav class="st-nav" aria-label="Estúdio">' + NAV.map(([k, ic, l]) => '<button class="' + (U().sub === k ? 'on' : '') + '" data-act="stNav" data-v="' + k + '">' + icon(ic, 'ic-sm') + '<span>' + l + '</span>' + (k === 'projetos' ? '<em>' + W.ST.design.filter(p => p.etapa !== 'Entregue').length + '</em>' : '') + '</button>').join('') + '</nav>' +
     '<span class="sp"></span><button class="st-back" data-act="go" data-v="inicio">' + icon('chevL', 'ic-sm') + 'Voltar ao CRM</button></aside>' +

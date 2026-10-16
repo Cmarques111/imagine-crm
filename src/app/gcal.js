@@ -1,4 +1,4 @@
-/* Imagine CRM · integração com o Google Agenda (feita no navegador de cada sócio) */
+/* Atlas · CRM da Imagine · integração com o Google Agenda (feita no navegador de cada sócio) */
 (function(){
 const W = window;
 let tok = null, exp = 0, cache = {}, byId = {};
@@ -52,7 +52,7 @@ W.GCal = {
     return out;
   },
   async create(ev) {
-    await api('calendars/primary/events', { method: 'POST', body: JSON.stringify({ summary: ev.t, description: 'Criado pelo Imagine CRM [imagine-crm]', start: { dateTime: local(ev.d, ev.h), timeZone: tz() }, end: { dateTime: local(ev.d, ev.h + ev.dur), timeZone: tz() } }) });
+    await api('calendars/primary/events', { method: 'POST', body: JSON.stringify({ summary: ev.t, description: 'Criado pelo Atlas (Imagine Concept) [imagine-crm]', start: { dateTime: local(ev.d, ev.h), timeZone: tz() }, end: { dateTime: local(ev.d, ev.h + ev.dur), timeZone: tz() } }) });
     cache = {};
   }
 };

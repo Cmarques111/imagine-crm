@@ -1,4 +1,4 @@
-/* Imagine CRM · Início, Comercial (funil) e Carteira */
+/* Atlas · CRM da Imagine · Início, Comercial (funil) e Carteira */
 (function(){
 const W = window;
 W.VIEWS = W.VIEWS || {}; W.AFTER = W.AFTER || {}; W.ACT = W.ACT || {}; W.CHANGE = W.CHANGE || {}; W.DRAWERS = W.DRAWERS || {};

@@ -1,4 +1,4 @@
-/* Imagine CRM · Configurações: perfil, sócios, metas, integrações e backup */
+/* Atlas · CRM da Imagine · Configurações: perfil, sócios, metas, integrações e backup */
 (function(){
 const W = window;
 const V = W.VIEWS = W.VIEWS || {}, A = W.ACT = W.ACT || {}, C = W.CHANGE = W.CHANGE || {};

@@ -1,4 +1,4 @@
-/* Imagine CRM · utilidades compartilhadas */
+/* Atlas · CRM da Imagine · utilidades compartilhadas */
 (function(){
 const W = window;
 
@@ -135,6 +135,12 @@ const P = {
   book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>',
 };
 W.ICON_PATHS = P;
+/* Identidade Atlas: símbolos da marca aplicados como máscara (herdam a cor do texto) */
+W.ATLAS_DIR = W.ATLAS_DIR || 'atlas/';
+W.atl = (file, cls, label) => '<span class="atl ' + (cls || '') + '"' + (label ? ' role="img" aria-label="' + esc(label) + '"' : ' aria-hidden="true"') + ' style="-webkit-mask-image:url(' + W.ATLAS_DIR + file + ');mask-image:url(' + W.ATLAS_DIR + file + ')"></span>';
+W.atIcon = (n, cls) => W.atl('icons/nav-' + n + '.png', 'ati ' + (cls || ''));
+W.atlasMark = (cls, label) => W.atl('atlas-icon-navy.png', 'atl-mark ' + (cls || ''), label);
+W.atlasWord = (cls) => W.atl('atlas-word-navy.png', 'atl-word ' + (cls || ''));
 W.icon = (n, cls) => '<svg class="ic' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (P[n] || '') + '</svg>';
 
 /* Monograma IC (nuvem com iniciais vazadas) */

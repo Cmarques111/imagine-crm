@@ -2,7 +2,7 @@
   "name": "imagine-crm-functions",
   "private": true,
   "main": "index.js",
-  "engines": { "node": "20" },
+  "engines": { "node": "22" },
   "dependencies": {
     "fast-xml-parser": "^4.5.0",
     "firebase-admin": "^12.7.0",

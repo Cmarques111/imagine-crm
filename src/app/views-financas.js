@@ -128,16 +128,38 @@ W.mktFind = (s) => { for (const g of GROUPS) { const t = G(g).find(x => x.s === 
 W.mktVal = (t) => !t || t.v == null ? '—' : t.u === '%' ? fNum(t.v, 2) + '%' : (t.u === 'R$' ? 'R$ ' : t.u === 'US$' ? 'US$ ' : '') + fNum(t.v, t.d);
 const chg = (t) => t.c == null ? '—' : t.abs ? (t.c >= 0 ? '+' : '') + fNum(t.c, 2) + ' p.p.' : fPct(t.c);
 const newsList = () => live() || W.NEWS_LIVE ? (W.NEWS_LIVE || []) : NEWS;
+const CAT_C = { 'Bolsa BR': '#4C8DFF', 'Juros e inflação': '#F0B442', 'Câmbio': '#2FD0B8', 'Internacional': '#9B87FF', 'Commodities': '#F08A47', 'Empresas': '#5CC8FF', 'Agro': '#62C46A' };
+W.catTag = (c) => '<span class="ncat" style="--c:' + (CAT_C[c] || '#8FB0FF') + '">' + esc(c) + '</span>';
+const newsTime = (n) => n.ts ? new Date(n.ts) : new Date(Date.now() - ((n.h || 0) * 60 + (n.mi || 0)) * 60000);
+const ago = (d) => { const m = Math.max(0, Math.round((Date.now() - d) / 60000)); return m < 60 ? 'há ' + m + ' min' : m < 1440 ? 'há ' + Math.round(m / 60) + ' h' : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }); };
+const arrow = (up) => up ? '▲' : '▼';
 W.newsItem = (n, short) => {
   const t = n.ts ? new Date(n.ts) : new Date(Date.now() - (n.h * 60 + n.mi) * 60000);
   const sameDay = iso(t) === iso(new Date());
   const af = W.ST.clientes.filter(c => (n.seg || []).includes(c.segmento));
   return '<article class="nw ' + (n.hot ? 'hot' : '') + '"><time>' + (sameDay ? '' : t.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + '<br>') + t.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + '</time><div><h4>' + (n.url ? '<a href="' + esc(n.url) + '" target="_blank" rel="noopener" style="color:inherit">' + esc(n.t) + '</a>' : esc(n.t)) + '</h4>' + (short || !n.r ? '' : '<p>' + esc(n.r) + '</p>') +
-    '<div class="row"><span class="tag">' + esc(n.cat) + '</span>' + (n.src ? '<span class="tag" style="background:none;border:1px solid var(--line-2)">' + esc(n.src) + '</span>' : '<span class="tag" style="background:none;border:1px solid var(--line-2)">Exemplo</span>') + af.map(c => '<span class="tag t-both" title="Pode afetar este cliente">Afeta: ' + esc(c.nome) + '</span>').join('') + '</div></div></article>';
+    '<div class="row">' + (n.hot ? '<span class="nhot">Destaque</span>' : '') + catTag(n.cat) + (n.src ? '<span class="tag" style="background:none;border:1px solid var(--line-2)">' + esc(n.src) + '</span>' : '<span class="tag" style="background:none;border:1px solid var(--line-2)">Exemplo</span>') + af.map(c => '<span class="tag t-both" title="Pode afetar este cliente">Afeta: ' + esc(c.nome) + '</span>').join('') + '</div></div></article>';
 };
 function tkRow(t) {
   const up = (t.c || 0) >= 0, sp = sparkOf(t);
-  return '<tr data-tk="' + esc(t.s) + '"><td><b>' + esc(t.s) + '</b>' + (t.nota ? '<br><small class="muted">' + esc(t.nota) + '</small>' : '') + '</td><td class="r mono"><b class="tv" style="font-weight:500">' + mktVal(t) + '</b></td><td class="r"><span class="tc ' + (up ? 'pos' : 'neg') + '">' + chg(t) + '</span></td><td style="width:96px">' + (sp ? spark(sp, up) : '') + '</td></tr>';
+  return '<tr data-tk="' + esc(t.s) + '"><td><b>' + esc(t.s) + '</b>' + (t.nota ? '<br><small class="muted">' + esc(t.nota) + '</small>' : '') + '</td><td class="r mono"><b class="tv">' + mktVal(t) + '</b></td><td class="r"><span class="chip ' + (!t.c ? '' : up ? 'up' : 'down') + '">' + (t.c == null || !t.c ? '' : arrow(up) + ' ') + chg(t) + '</span></td><td style="width:96px">' + (sp ? spark(sp, up) : '') + '</td></tr>';
+}
+function pulse() {
+  const all = ['br', 'intl', 'fx', 'cmd', 'acoes'].flatMap(G).filter(t => t.c != null && !t.abs);
+  if (!all.length) return '';
+  const up = all.filter(t => t.c > 0).length, dn = all.filter(t => t.c < 0).length, srt = all.slice().sort((a, b) => b.c - a.c);
+  const best = srt[0], worst = srt[srt.length - 1], pct = Math.round(up / Math.max(1, up + dn) * 100);
+  const box = (lbl, t, cls) => '<div class="pl-b ' + cls + '"><small>' + lbl + '</small><b>' + esc(t.s) + '</b><span class="chip ' + (t.c >= 0 ? 'up' : 'down') + '">' + arrow(t.c >= 0) + ' ' + fPct(t.c) + '</span></div>';
+  return '<section class="pulse"><div class="pl-h"><small>Pulso do mercado</small><b>' + (pct >= 60 ? 'Dia positivo' : pct <= 40 ? 'Dia negativo' : 'Mercado dividido') + '</b><div class="pl-bar" title="' + up + ' em alta, ' + dn + ' em queda"><i style="width:' + pct + '%"></i></div><span><em class="pos">' + up + ' em alta</em> · <em class="neg">' + dn + ' em queda</em></span></div>' +
+    box('Maior alta', best, 'up') + box('Maior queda', worst, 'down') + '</section>';
+}
+function featured(news) {
+  const pick = news.filter(n => n.hot).concat(news.filter(n => !n.hot)).slice(0, 3);
+  if (!pick.length) return '';
+  return '<section class="feat"><div class="feat-h"><h2>Radar de notícias</h2><span class="muted">O que está movendo o mercado agora</span></div><div class="feat-g">' + pick.map((n, i) => {
+    const t = newsTime(n), h = '<h3>' + (n.url ? '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + esc(n.t) + '</a>' : esc(n.t)) + '</h3>';
+    return '<article class="fn ' + (i === 0 ? 'lead' : '') + '" style="--c:' + (CAT_C[n.cat] || '#8FB0FF') + '"><div class="row">' + (n.hot ? '<span class="nhot">Destaque</span>' : '') + catTag(n.cat) + '<time>' + ago(t) + '</time></div>' + h + (n.r ? '<p>' + esc(n.r) + '</p>' : '') + '<small class="muted">' + esc(n.src || 'Exemplo') + '</small></article>';
+  }).join('') + '</div></section>';
 }
 V.mercado = () => {
   const U = W.UI.mkt, cats = NEWS_CATS, L = live();
@@ -149,9 +171,10 @@ V.mercado = () => {
   return ph('globe', 'Mercado financeiro', 'Mercado 24h', '<span class="row" style="gap:8px"><span class="live-dot"' + (L ? '' : ' style="background:var(--warn);box-shadow:none"') + '></span>' + (L ? 'Dados reais · atualizado às ' + (at ? at.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '—') + ' · cotações da B3 com atraso de até 15 min' : 'Demonstração com dados ilustrativos') + '</span>',
       (W.Store && W.Store.mode !== 'local' ? '<button class="btn" data-act="mktRefresh">' + icon('refresh', 'ic-sm') + 'Atualizar agora</button>' : '') + '<button class="btn" data-act="toggleHP">' + icon('calc', 'ic-sm') + 'HP12C</button><a class="btn" href="#mercado-calc" data-act="scrollCalc">' + icon('calc', 'ic-sm') + 'Calculadoras</a>') +
     (L ? '' : '<div class="banner">' + icon('alert') + '<div><b>Modo demonstração.</b> Cotações e notícias abaixo são exemplos. No sistema publicado no Firebase, um robô busca a cada 10 minutos cotações da B3 e das bolsas internacionais, câmbio, juros do Banco Central e notícias de vários portais.</div></div>') +
-    '<div class="ticker" role="list">' + strip.map(t => '<div class="tk" role="listitem" data-tk="' + esc(t.s) + '"><small>' + esc(t.s) + '</small><b class="tv">' + mktVal(t) + '</b><span class="tc ' + ((t.c || 0) >= 0 ? 'pos' : 'neg') + '">' + chg(t) + '</span></div>').join('') + '</div>' +
+    '<div class="ticker" role="list">' + strip.map(t => { const up = (t.c || 0) >= 0, sp = sparkOf(t); return '<div class="tk ' + (up ? 'up' : 'down') + '" role="listitem" data-tk="' + esc(t.s) + '"><small>' + esc(t.s) + '</small><b class="tv">' + mktVal(t) + '</b><div class="tk-f"><span class="chip ' + (up ? 'up' : 'down') + '">' + arrow(up) + ' ' + chg(t) + '</span>' + (sp ? spark(sp, up) : '') + '</div></div>'; }).join('') + '</div>' +
+    pulse() + featured(news) +
     '<div class="cols c-main" style="margin-bottom:16px">' +
-      '<section class="card"><div class="card-h"><div><h3>Notícias · últimas 24 horas</h3><div class="sub">' + news.length + ' manchetes' + (L && W.MKT_LIVE.fontes ? ' de ' + W.MKT_LIVE.fontes.length + ' fontes' : '') + ' · “Afeta” liga a notícia aos clientes do mesmo setor</div></div></div>' +
+      '<section class="card news-card"><div class="card-h"><div><h3><span class="live-badge"><i></i>Ao vivo</span>Notícias · últimas 24 horas</h3><div class="sub">' + news.length + ' manchetes' + (L && W.MKT_LIVE.fontes ? ' de ' + W.MKT_LIVE.fontes.length + ' fontes' : '') + ' · “Afeta” liga a notícia aos clientes do mesmo setor</div></div></div>' +
         '<div style="padding:12px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px"><input class="inp" type="search" id="newsQ" data-chg="newsQ" placeholder="Filtrar notícias…" value="' + esc(U.q) + '" aria-label="Filtrar notícias"><div class="subnav" style="margin:0">' + cats.map(c => '<button class="' + (U.cat === c ? 'on' : '') + '" data-act="newsCat" data-v="' + c + '" style="height:30px;font-size:12.5px">' + c + '</button>').join('') + '</div></div>' +
         '<div class="news" style="max-height:640px;overflow:auto">' + (news.map(n => newsItem(n)).join('') || '<div class="empty">' + (L ? 'Nenhuma notícia nesse filtro.' : 'Nenhuma notícia nesse filtro.') + '</div>') + '</div></section>' +
       '<div class="stack">' +
@@ -212,9 +235,10 @@ W.startMarket = () => {
       t.c = t.abs ? t.c + (t.v - old) : t.c + step * 100;
       HIST[t.s].push(t.v); HIST[t.s].shift();
       $$('[data-tk="' + CSS.escape(t.s) + '"]').forEach(el => {
-        const b = el.querySelector('.tv'), last = el.querySelector('.tc');
+        const b = el.querySelector('.tv'), last = el.querySelector('.chip');
         if (b) b.textContent = mktVal(t);
-        if (last) { last.className = 'tc num ' + (t.c >= 0 ? 'pos' : 'neg'); last.textContent = chg(t); }
+        if (last) { last.className = 'chip ' + (t.c >= 0 ? 'up' : 'down'); last.textContent = (t.c >= 0 ? '▲ ' : '▼ ') + chg(t); }
+        if (el.classList.contains('tk')) { el.classList.toggle('up', t.c >= 0); el.classList.toggle('down', t.c < 0); }
         const sv = el.querySelector('svg.spark'); if (sv) sv.outerHTML = spark(HIST[t.s], t.c >= 0);
         el.classList.remove('flash-up', 'flash-dn'); void el.offsetWidth; el.classList.add(t.v >= old ? 'flash-up' : 'flash-dn');
       });

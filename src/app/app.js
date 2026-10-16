@@ -78,7 +78,7 @@ W.hbars = (rows, fmt) => {
 W.spark = (vals, up) => {
   const w = 84, h = 24, mn = Math.min(...vals), mx = Math.max(...vals), r = mx - mn || 1;
   const pts = vals.map((v, i) => (i / (vals.length - 1) * w).toFixed(1) + ',' + (h - 2 - (v - mn) / r * (h - 4)).toFixed(1)).join(' ');
-  return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" aria-hidden="true"><polyline points="' + pts + '" fill="none" stroke="' + (up ? '#37B486' : '#E2615F') + '" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+  return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" aria-hidden="true"><polyline points="' + pts + '" fill="none" stroke="' + (up ? 'var(--pos)' : 'var(--neg)') + '" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 };
 W.lineChart = (pts, opts) => {
   opts = opts || {};
